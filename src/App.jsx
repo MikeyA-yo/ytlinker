@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import './App.css'
+import Nav from './Nav'
 function App() {
   const [count, setCount] = useState(0)
-  async function getDl(link){
+  async function getDl(l){
     //working
-    // const res = await fetch("http://localhost:3000/")
+    // const res = await fetch(`http://localhost:3000/download?link=${l}`)
     // const blob = await res.blob()
     // const url = window.URL.createObjectURL(blob);
     // const link = document.createElement('a');
@@ -21,13 +22,12 @@ function App() {
     //   console.log('Download completed');
     // };
     // console.log(res,blob, url)
+    //bg-[#028391]
   }
   return (
     <>
       <div className='min-h-screen '>
-        <div className='bg-[#028391]'>
-          <p className='text-[#FEAE6F] text-2xl'>Simple Youtube downloader</p>
-        </div>
+         <Nav />
       </div>
     </>
   )
