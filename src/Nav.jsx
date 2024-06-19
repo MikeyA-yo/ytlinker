@@ -24,9 +24,8 @@ function Bar({ onClick }) {
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
-  console.log(open);
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col openSans">
       <nav className="flex justify-evenly items-center p-8">
         <div>
           <p className="text-[#FEAE6F] lg:text-2xl md:text-2xl text-xl">
