@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import Nav from './Nav'
+import Center from './Center'
 function App() {
   const [count, setCount] = useState(0)
   async function getDl(l){
@@ -28,6 +29,7 @@ function App() {
     <>
       <div className='min-h-screen '>
          <Nav />
+         <Center />
       </div>
     </>
   )
