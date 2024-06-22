@@ -1,12 +1,6 @@
 import { useEffect, useState } from "react";
+import { URL } from "./assets/xxy";
 function VideoDetails({ details }) {
-  //   async function getnsetDetails(){
-  //     const res = await fetch(`http://localhost:3000/?link=${l}`)
-  //     const data = await res.json()
-  //     setDetails(data)
-  //   }
-  //   getnsetDetails()
-  // if(details) console.log(details, details.image[details.image.length - 1].url )
   return (
     <>
       {!details && <p>Loading....</p>}
@@ -61,8 +55,8 @@ export default function Center() {
   }
   async function getBytes(l, f = null) {
     let url = f
-      ? `https://ytlinker-backend.onrender.com/sizeDetails/?link=${l}&filter=${f}`
-      : `https://ytlinker-backend.onrender.com/sizeDetails/?link=${l}`;
+      ? `${URL}sizeDetails/?link=${l}&filter=${f}`
+      : `${URL}sizeDetails/?link=${l}`;
     const res = await fetch(url);
     const data = await res.text();
     setSize(data);
