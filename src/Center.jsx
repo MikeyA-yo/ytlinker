@@ -14,7 +14,7 @@ function VideoDetails({details}){
                 <>
                     <h3 className='mont text-center pt-10'>Details</h3>
                     <div className='bg-[#028391]  bg-opacity-10 flex flex-col-reverse items-center justify-center gap-4 lg:flex-row md:flex-row p-2 max-w-full'>
-                        <img src={details.image[details.image.length - 1].url ?? "/assets/react.svg"} alt='image of yt video' className='h-20 w-20 rounded-full' />
+                        <img src={details.image[details.image.length - 1].url ?? "/assets/react.svg"} alt='image of yt video' className='h-24 w-24 rounded-full' />
                         <div className='h-full flex flex-col gap-1 items-center justify-center'>
                             <p>{details.title}</p>
                             <p className='text-sm sairaCondensed'>{details.timestamp}</p>
@@ -25,14 +25,35 @@ function VideoDetails({details}){
         </>
     )
 }
+function DownloadButton({size, onClick, onChange}){
+  return (
+    <>
+        <div className='bg-[#028391] mt-4 flex gap-1   justify-center  bg-opacity-20'>
+            <button onClick={onClick} className='h-12 bg-[#028391]'>Download</button>
+            <select onChange={onChange} className='h-12 bg-[#028391] rounded'>
+                <option value={`mp4`}>MP4 {size}</option>
+                <option value={`mp3`}>MP3 {size}</option>
+            </select>
+        </div>
+    </>
+  )
+}
 
 export default function Center(){
-    const [link, setLink]= useState("")
+    const [link, setLink]= useState("");
     const [details, setDetails] = useState();
+    const [size, setSize] = useState("");
+    const [filter, setFilter] = useState("mp4");
        async function getnsetDetails(l){
         const res = await fetch(`http://localhost:3000/?link=${l}`)
         const data = await res.json()
         setDetails(data)
+      }
+      async function getBytes(l, f = null){
+        let url = f ? `http://localhost:3000/sizeDetails/?link=${l}&filter=${f}` : `http://localhost:3000/sizeDetails/?link=${l}`;
+        const res = await fetch(url);
+        const data = await res.text();
+        setSize(data)
       }
     async function getDl(l){
         //working
@@ -73,6 +94,7 @@ export default function Center(){
                         <button 
                          onClick={(e)=>{
                             getnsetDetails(link)
+                            getBytes(link, filter)
                             e.preventDefault()
                         }}
                         type='submit' className='rounded bg-[#01204E] bg-opacity-70 hover:bg-opacity-30 p-2'>Enter</button>
@@ -80,6 +102,14 @@ export default function Center(){
                 </div>
                 <div>
                   {details && <VideoDetails details={details} />}
+                  {size && <DownloadButton size={size} onChange={(e)=>{
+                    setFilter(e.target.value)
+                  }}
+                  onClick={(e)=>{
+
+                  }}
+                  />
+                }
                 </div>
             </div>
         </>
