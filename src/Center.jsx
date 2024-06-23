@@ -1,5 +1,5 @@
 import {  useState } from "react";
-import { URL } from "./assets/xxy";
+import { URL, URL_DL } from "./assets/xxy";
 function genRandom(len){
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let res = ''
@@ -58,7 +58,7 @@ export default function Center() {
   const [filter, setFilter] = useState("mp4");
   const [load, setLoad] = useState(false);
   async function getnsetDetails(l) {
-    const res = await fetch(`https://ytlinker-backend.onrender.com/?link=${l}`);
+    const res = await fetch(`${URL}?link=${l}`);
     const data = await res.json();
     setDetails(data);
   }
@@ -72,7 +72,7 @@ export default function Center() {
   }
   async function dl(l) {
     //working
-    const res = await fetch(`${URL}download?link=${l}&filter=${filter}`)
+    const res = await fetch(`${URL_DL}?link=${l}&filter=${filter}`)
     const blob = await res.blob()
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -82,10 +82,13 @@ export default function Center() {
     document.body.appendChild(link);
     link.click();
     // Clean up the URL object after the download is triggered
-    link.onload = () => {
-      window.URL.revokeObjectURL(url); // Release the memory
-      console.log('Download completed');
-    };
+    link.remove(); // Remove the link element from the DOM immediately
+    window.URL.revokeObjectURL(url); // Release the memory
+    console.log('Download initiated and URL revoked');
+    // link.onload = () => {
+    //   window.URL.revokeObjectURL(url); // Release the memory
+    //   console.log('Download completed');
+    // };
     // console.log(res,blob, url)
     //bg-[#028391]
   }
