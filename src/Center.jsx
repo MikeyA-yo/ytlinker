@@ -1,5 +1,14 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { URL } from "./assets/xxy";
+function genRandom(len){
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let res = ''
+  for (let i = 0; i < len; i++){
+      let index = Math.floor(Math.random() * 62);
+      res += characters.charAt(index);
+  }
+  return res;
+}
 function VideoDetails({ details }) {
   return (
     <>
@@ -47,7 +56,7 @@ export default function Center() {
   const [details, setDetails] = useState();
   const [size, setSize] = useState("");
   const [filter, setFilter] = useState("mp4");
-  const [download, setDownload] = useState(false);
+  const [load, setLoad] = useState(false);
   async function getnsetDetails(l) {
     const res = await fetch(`https://ytlinker-backend.onrender.com/?link=${l}`);
     const data = await res.json();
@@ -61,22 +70,22 @@ export default function Center() {
     const data = await res.text();
     setSize(data);
   }
-  async function getDl(l) {
+  async function dl(l) {
     //working
-    // const res = await fetch(`http://localhost:3000/download?link=${l}`)
-    // const blob = await res.blob()
-    // const url = window.URL.createObjectURL(blob);
-    // const link = document.createElement('a');
-    // link.href = url;
-    // link.setAttribute('download', "tailwindconfig");
-    // // Append the link to the body and trigger a click to start the download
-    // document.body.appendChild(link);
-    // link.click();
-    // // Clean up the URL object after the download is triggered
-    // link.onload = () => {
-    //   window.URL.revokeObjectURL(url); // Release the memory
-    //   console.log('Download completed');
-    // };
+    const res = await fetch(`${URL}download?link=${l}&filter=${filter}`)
+    const blob = await res.blob()
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', genRandom(5));
+    // Append the link to the body and trigger a click to start the download
+    document.body.appendChild(link);
+    link.click();
+    // Clean up the URL object after the download is triggered
+    link.onload = () => {
+      window.URL.revokeObjectURL(url); // Release the memory
+      console.log('Download completed');
+    };
     // console.log(res,blob, url)
     //bg-[#028391]
   }
@@ -124,7 +133,9 @@ export default function Center() {
                 setFilter(e.target.value);
               }}
               onClick={(e) => {
-                setDownload(true);
+                if(link.length > 10){
+                  dl(link);
+                }
               }}
             />
           )}
