@@ -18,7 +18,7 @@ export default function Status() {
 export function Err({ message, onClick }) {
   return (
     <>
-      <div className="error" onClick={onClick}>
+      <div className="error pt-2" onClick={onClick}>
         <div className="error__icon">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -54,7 +54,7 @@ export function Err({ message, onClick }) {
 export function Comp({ message, onClick }) {
   return (
     <>
-      <div className="info" onClick={onClick}>
+      <div className="info pt-2" onClick={onClick}>
         <div className="info__icon">
           <svg
             xmlns="http://www.w3.org/2000/svg"
