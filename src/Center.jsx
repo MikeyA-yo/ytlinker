@@ -108,7 +108,15 @@ export default function Center() {
     // console.log(res,blob, url)
     //bg-[#028391]
   }
-  console.log(load);
+  function checkCanDl(delim){
+    if(delim.includes("GiB")){
+      return parseFloat(delim) < 1;
+    }else if(delim.includes("MiB")){
+      return parseFloat(delim) < 1000;
+    }else {
+      return true;
+    }
+  }
   return (
     <>
       <div className="flex text-[#FEAE6F] justify-center items-center flex-col">
@@ -153,10 +161,10 @@ export default function Center() {
                 setFilter(e.target.value);
               }}
               onClick={() => {
-                if (link.length > 10 && parseFloat(size) < 350) {
+                if (link.length > 10 && checkCanDl(size) ) {
                   dl(link);
                   console.log("after ??");
-                }else if(parseFloat(size) > 350){
+                }else if(!checkCanDl(size)){
                   alert("We don't have enough resource to download large files, consider donating")
                 }
               }}
