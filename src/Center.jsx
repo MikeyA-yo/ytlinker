@@ -1,5 +1,6 @@
 import {  useState } from "react";
 import { URL, URL_DL } from "./assets/xxy";
+import Loading from "./loading.jsx";
 function genRandom(len){
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let res = ''
@@ -12,7 +13,6 @@ function genRandom(len){
 function VideoDetails({ details }) {
   return (
     <>
-      {!details && <p>Loading....</p>}
       {details && (
         <>
           <h3 className="mont text-center pt-10">Details</h3>
@@ -59,19 +59,24 @@ export default function Center() {
   const [load, setLoad] = useState(false);
   async function getnsetDetails(l) {
     const res = await fetch(`${URL}?link=${l}`);
+    if(res.ok) setLoad(true)
     const data = await res.json();
     setDetails(data);
+    setLoad(false)
   }
   async function getBytes(l, f = null) {
     let url = f
       ? `${URL}sizeDetails/?link=${l}&filter=${f}`
       : `${URL}sizeDetails/?link=${l}`;
     const res = await fetch(url);
+    if(res.ok) setLoad(true)
     const data = await res.text();
     setSize(data);
+    setLoad(false)
   }
   async function dl(l) {
-    //working
+     try {
+        //working
     const res = await fetch(`${URL_DL}?link=${l}&filter=${filter}`)
     const blob = await res.blob()
     const url = window.URL.createObjectURL(blob);
@@ -85,6 +90,9 @@ export default function Center() {
     link.remove(); // Remove the link element from the DOM immediately
     window.URL.revokeObjectURL(url); // Release the memory
     console.log('Download initiated and URL revoked');
+     } catch (e) {
+      alert(e.message)
+     }
     // link.onload = () => {
     //   window.URL.revokeObjectURL(url); // Release the memory
     //   console.log('Download completed');
@@ -129,6 +137,7 @@ export default function Center() {
         </div>
         <div>
           {details && <VideoDetails details={details} />}
+          {load && <Loading />}
           {size && (
             <DownloadButton
               size={size}
