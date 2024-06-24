@@ -1,12 +1,13 @@
-import {  useState } from "react";
+import { useState } from "react";
 import { URL, URL_DL } from "./assets/xxy";
 import Loading from "./loading.jsx";
-function genRandom(len){
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let res = ''
-  for (let i = 0; i < len; i++){
-      let index = Math.floor(Math.random() * 62);
-      res += characters.charAt(index);
+function genRandom(len) {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let res = "";
+  for (let i = 0; i < len; i++) {
+    let index = Math.floor(Math.random() * 62);
+    res += characters.charAt(index);
   }
   return res;
 }
@@ -57,42 +58,45 @@ export default function Center() {
   const [size, setSize] = useState("");
   const [filter, setFilter] = useState("mp4");
   const [load, setLoad] = useState(false);
+  const [dload, setDload] = useState(false);
   async function getnsetDetails(l) {
     const res = await fetch(`${URL}?link=${l}`);
-    if(res.ok) setLoad(true)
+    if (res.ok) setLoad(true);
     const data = await res.json();
     setDetails(data);
-    setLoad(false)
+    setLoad(false);
   }
   async function getBytes(l, f = null) {
     let url = f
       ? `${URL}sizeDetails/?link=${l}&filter=${f}`
       : `${URL}sizeDetails/?link=${l}`;
     const res = await fetch(url);
-    if(res.ok) setLoad(true)
+    if (res.ok) setLoad(true);
     const data = await res.text();
     setSize(data);
-    setLoad(false)
+    setLoad(false);
   }
   async function dl(l) {
-     try {
-        //working
-    const res = await fetch(`${URL_DL}?link=${l}&filter=${filter}`)
-    const blob = await res.blob()
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', genRandom(5));
-    // Append the link to the body and trigger a click to start the download
-    document.body.appendChild(link);
-    link.click();
-    // Clean up the URL object after the download is triggered
-    link.remove(); // Remove the link element from the DOM immediately
-    window.URL.revokeObjectURL(url); // Release the memory
-    console.log('Download initiated and URL revoked');
-     } catch (e) {
-      alert(e.message)
-     }
+    try {
+      //working
+      setDload(true);
+      const res = await fetch(`${URL_DL}?link=${l}&filter=${filter}`);
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", genRandom(5));
+      // Append the link to the body and trigger a click to start the download
+      document.body.appendChild(link);
+      link.click();
+      // Clean up the URL object after the download is triggered
+      link.remove(); // Remove the link element from the DOM immediately
+      window.URL.revokeObjectURL(url); // Release the memory
+      console.log("Download initiated and URL revoked");
+      setDload(false);
+    } catch (e) {
+      alert(e.message);
+    }
     // link.onload = () => {
     //   window.URL.revokeObjectURL(url); // Release the memory
     //   console.log('Download completed');
@@ -100,7 +104,7 @@ export default function Center() {
     // console.log(res,blob, url)
     //bg-[#028391]
   }
-
+  console.log(load);
   return (
     <>
       <div className="flex text-[#FEAE6F] justify-center items-center flex-col">
@@ -144,13 +148,17 @@ export default function Center() {
               onChange={(e) => {
                 setFilter(e.target.value);
               }}
-              onClick={(e) => {
-                if(link.length > 10){
+              onClick={() => {
+                if (link.length > 10 && parseFloat(size) < 350) {
                   dl(link);
+                  console.log("after ??");
+                }else if(parseFloat(size) > 350){
+                  alert("We don't have enough resource to download large files, consider donating")
                 }
               }}
             />
           )}
+          {dload && <Loading text="Download Started" />}
         </div>
       </div>
     </>
