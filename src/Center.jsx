@@ -154,6 +154,7 @@ export default function Center() {
         <div>
           {details && <VideoDetails details={details} />}
           {load && <Loading />}
+          {dload && <Loading text="Download Started" />}
           {size && (
             <DownloadButton
               size={size}
@@ -170,7 +171,7 @@ export default function Center() {
               }}
             />
           )}
-          {dload && <Loading text="Download Started" />}
+          
           {comp && <Comp message={"Your Download has completed"} onClick={()=>{setComp(false)}} />}
           {err && <Err message={"Download couldn't complete"} onClick={()=>{setErr(false)}} />}
         </div>
