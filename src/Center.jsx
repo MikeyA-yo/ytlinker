@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { URL, URL_DL } from "./assets/xxy";
 import Loading from "./loading.jsx";
+import { Comp, Err } from "./status.jsx";
 function genRandom(len) {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -59,6 +60,8 @@ export default function Center() {
   const [filter, setFilter] = useState("mp4");
   const [load, setLoad] = useState(false);
   const [dload, setDload] = useState(false);
+  const [comp, setComp]= useState(false)
+  const [err, setErr] = useState(false)
   async function getnsetDetails(l) {
     const res = await fetch(`${URL}?link=${l}`);
     if (res.ok) setLoad(true);
@@ -94,8 +97,9 @@ export default function Center() {
       window.URL.revokeObjectURL(url); // Release the memory
       console.log("Download initiated and URL revoked");
       setDload(false);
+      setComp(true)
     } catch (e) {
-      alert(e.message);
+      setErr(true)
     }
     // link.onload = () => {
     //   window.URL.revokeObjectURL(url); // Release the memory
@@ -159,6 +163,8 @@ export default function Center() {
             />
           )}
           {dload && <Loading text="Download Started" />}
+          {comp && <Comp message={"Your Download has completed"} onClick={()=>{setComp(false)}} />}
+          {err && <Err message={"Download couldn't complete"} onClick={()=>{setErr(false)}} />}
         </div>
       </div>
     </>
