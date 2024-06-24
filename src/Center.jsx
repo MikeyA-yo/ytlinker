@@ -171,7 +171,6 @@ export default function Center() {
               }}
             />
           )}
-          
           {comp && <Comp message={"Your Download has completed"} onClick={()=>{setComp(false)}} />}
           {err && <Err message={"Download couldn't complete"} onClick={()=>{setErr(false)}} />}
         </div>
