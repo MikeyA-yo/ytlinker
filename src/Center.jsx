@@ -102,12 +102,6 @@ export default function Center() {
     } catch (e) {
       setErr(true)
     }
-    // link.onload = () => {
-    //   window.URL.revokeObjectURL(url); // Release the memory
-    //   console.log('Download completed');
-    // };
-    // console.log(res,blob, url)
-    //bg-[#028391]
   }
   function checkCanDl(delim){
     if(delim.includes("GiB")){
