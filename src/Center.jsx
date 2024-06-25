@@ -62,6 +62,7 @@ export default function Center() {
   const [dload, setDload] = useState(false);
   const [comp, setComp]= useState(false)
   const [err, setErr] = useState(false)
+  const [errText, setErrText] = useState("Download couldn't complete")
   async function getnsetDetails(l) {
     const res = await fetch(`${URL}?link=${l}`);
     if (res.ok) setLoad(true);
@@ -166,13 +167,15 @@ export default function Center() {
                   dl(link);
                   console.log("after ??");
                 }else if(!checkCanDl(size)){
+                  setErr(true)
+                  setErrText("Consider Donating for larger files at 0124335135 GTbank")
                   alert("We don't have enough resource to download large files, consider donating")
                 }
               }}
             />
           )}
           {comp && <Comp message={"Your Download has completed"} onClick={()=>{setComp(false)}} />}
-          {err && <Err message={"Download couldn't complete"} onClick={()=>{setErr(false)}} />}
+          {err && <Err message={errText} onClick={()=>{setErr(false)}} />}
         </div>
       </div>
     </>
