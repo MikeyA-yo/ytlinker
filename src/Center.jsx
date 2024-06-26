@@ -64,21 +64,41 @@ export default function Center() {
   const [err, setErr] = useState(false)
   const [errText, setErrText] = useState("Download couldn't complete")
   async function getnsetDetails(l) {
+   try {
+    setLoad(true);
     const res = await fetch(`${URL}?link=${l}`);
     if (res.ok) setLoad(true);
+    if(!res.ok){
+      setErr(true)
+      setErrText("Confirm you input the right link")
+    }
     const data = await res.json();
     setDetails(data);
     setLoad(false);
+   } catch (e) {
+    setErr(true)
+    setErrText("Confirm you input the right link")
+   }
   }
   async function getBytes(l, f = null) {
-    let url = f
-      ? `${URL}sizeDetails/?link=${l}&filter=${f}`
-      : `${URL}sizeDetails/?link=${l}`;
-    const res = await fetch(url);
-    if (res.ok) setLoad(true);
-    const data = await res.text();
-    setSize(data);
-    setLoad(false);
+      try {
+        let url = f
+        ? `${URL}sizeDetails/?link=${l}&filter=${f}`
+        : `${URL}sizeDetails/?link=${l}`;
+      setLoad(true);
+      const res = await fetch(url);
+      if (res.ok) setLoad(true);
+      if (!res.ok){
+         setErr(true)
+         setErrText("Error fetching data")
+        }
+      const data = await res.text();
+      setSize(data);
+      setLoad(false);
+      } catch (e) {
+        setErr(true)
+        setErrText("Confirm the Link you input")
+      }
   }
   async function dl(l) {
     try {
@@ -159,7 +179,6 @@ export default function Center() {
               onClick={() => {
                 if (link.length > 10 && checkCanDl(size) ) {
                   dl(link);
-                  console.log("after ??");
                 }else if(!checkCanDl(size)){
                   setErr(true)
                   setErrText("Consider Donating for larger files at 0124335135 GTbank")
