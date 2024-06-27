@@ -77,6 +77,7 @@ export default function Center() {
       setErr(true)
       setErrText("Confirm you input the right link")
     }
+    setErr(false)
     const data = await res.json();
     setDetails(data);
     setLoad(false);
