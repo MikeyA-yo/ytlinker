@@ -86,6 +86,11 @@ export default function Center() {
    }
   }
   async function getBytes(l, f = null) {
+    if(l.length < 12){
+      setErr(true)
+      setErrText("Confirm you input the right link")
+      return;
+    }
       try {
         let url = f
         ? `${URL}sizeDetails/?link=${l}&filter=${f}`
