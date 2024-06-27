@@ -65,6 +65,11 @@ export default function Center() {
   const [errText, setErrText] = useState("Download couldn't complete")
   async function getnsetDetails(l) {
    try {
+    if(l.length < 12){
+      setErr(true)
+      setErrText("Confirm you input the right link")
+      return;
+    }
     setLoad(true);
     const res = await fetch(`${URL}?link=${l}`);
     if (res.ok) setLoad(true);
