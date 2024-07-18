@@ -113,14 +113,30 @@ export default function Center() {
   }
   async function dl(l) {
     try {
-      //working
+      //working ${URL_DL}
       setDload(true);
-      const res = await fetch(`${URL_DL}?link=${l}&filter=${filter}`);
-      const blob = await res.blob();
+      const res = await fetch(`${URL}download?link=${l}&filter=${filter}`);
+      const reader = res.body.getReader();
+      const chunks = [];
+      let receivedLength = 0;
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        chunks.push(value);
+        receivedLength += value.length;
+      }
+    
+      const allChunks = new Uint8Array(receivedLength);
+      let position = 0;
+      for (const chunk of chunks) {
+        allChunks.set(chunk, position);
+        position += chunk.length;
+      }
+      const blob = new Blob([allChunks], { type: 'application/octet-stream' });
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", genRandom(5));
+      link.setAttribute("download", genRandom(5) + ".mp4");
       // Append the link to the body and trigger a click to start the download
       document.body.appendChild(link);
       link.click();
