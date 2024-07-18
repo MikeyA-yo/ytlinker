@@ -131,7 +131,8 @@ export default function Center() {
       setDload(false);
       setComp(true)
     } catch (e) {
-      setErr(true)
+      setErr(true);
+      setDload(false);
     }
   }
   function checkCanDl(delim){
