@@ -137,7 +137,7 @@ export default function Center() {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", genRandom(5) + ".mp4");
+      link.setAttribute("download", genRandom(5) + "."+ filter);
       // Append the link to the body and trigger a click to start the download
       document.body.appendChild(link);
       link.click();
