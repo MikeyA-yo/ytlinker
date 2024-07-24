@@ -115,7 +115,7 @@ export default function Center() {
     try {
       //working ${URL_DL}
       setDload(true);
-      const res = await fetch(`${URL}download?link=${l}&filter=${filter}`);
+      const res = await fetch(`${URL_DL}download?link=${l}&filter=${filter}`);
       const reader = res.body.getReader();
       const chunks = [];
       let receivedLength = 0;
